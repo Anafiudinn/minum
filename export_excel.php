@@ -40,15 +40,17 @@ if ($result->num_rows > 0) {
 $writer = new Xlsx($spreadsheet);
 $filename = 'stock_data.xlsx';
 
+// Menyimpan file di server
+$writer->save($filename);
+echo "File berhasil disimpan. Unduh file ini: <a href='$filename'>Download</a><br>";
+
+// Untuk download langsung
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment; filename="'. urlencode($filename) .'"');
 header('Cache-Control: max-age=0');
 
-// Membersihkan buffer output sebelum mengirim file
-ob_clean();
-flush();
-
-// Menyimpan file ke output
+// Bersihkan buffer dan kirim output
+ob_end_clean();
 $writer->save('php://output');
 exit;
 ?>
